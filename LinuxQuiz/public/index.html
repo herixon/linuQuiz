@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Quiz App</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+		}
+
+		h1 {
+			margin-top: 50px;
+		}
+
+		#question {
+			margin-top: 30px;
+			font-size: 20px;
+		}
+
+		#choices {
+			display: flex;
+			flex-direction: column;
+			margin-top: 20px;
+		}
+
+		.answer-btn {
+			margin: 10px;
+			padding: 10px;
+			border: none;
+			border-radius: 5px;
+			background-color: #E6E6FA;
+			cursor: pointer;
+		}
+
+		.answer-btn:hover {
+			background-color: #D8BFD8;
+		}
+
+		#submit {
+			margin-top: 20px;
+			padding: 10px;
+			border: none;
+			border-radius: 5px;
+			background-color: #ADD8E6;
+			cursor: pointer;
+		}
+
+		#submit:hover {
+			background-color: #87CEEB;
+		}
+
+		#result {
+			margin-top: 30px;
+			font-size: 24px;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+	<h1>Linux Quiz App</h1>
+	<div id="question"></div>
+	<div id="choices"></div>
+	<button id="submit">Start Quiz</button>
+	<div id="result"></div>
+	<script>
+		// 回答をシャッフル
+		function choiceShuffle(choices) {
+  for (let i = choices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [choices[i], choices[j]] = [choices[j], choices[i]];
+  }
+  return choices;
+}	
+
+	// Questions
+const questions = [
+  {
+    question: "ファイルをコピーするためのコマンドは？",
+    choices: choiceShuffle(["cp", "mv", "rm", "ls"]),
+    answer: "cp"
+  },
+  {
+    question: "ファイルを移動するためのコマンドは？",
+    choices: choiceShuffle(["mv", "cp", "rm", "ls"]),
+    answer: "mv"
+  },
+  {
+    question: "現在のディレクトリの中身を表示するためのコマンドは？",
+    choices: choiceShuffle(["ls", "cd", "pwd", "chmod"]),
+    answer: "ls"
+  },
+  {
+    question: "ファイルやディレクトリを削除するためのコマンドは？",
+    choices: choiceShuffle(["rm", "mv", "cp", "ls"]),
+    answer: "rm"
+  },
+  {
+    question: "ディレクトリを作成するためのコマンドは？",
+    choices: choiceShuffle(["mkdir", "touch", "cat", "grep"]),
+    answer: "mkdir"
+  },
+  {
+    question: "ファイルの中身を表示するためのコマンドは？",
+    choices: choiceShuffle(["cat", "grep", "sed", "awk"]),
+    answer: "cat"
+  },
+  {
+    question: "ファイルの中身を検索するためのコマンドは？",
+    choices: choiceShuffle(["grep", "cat", "sed", "awk"]),
+    answer: "grep"
+  },
+  {
+    question: "ファイルの権限を変更するためのコマンドは？",
+    choices: choiceShuffle(["chmod", "chown", "chgrp", "umask"]),
+    answer: "chmod"
+  },
+  {
+    question: "ユーザーを追加するためのコマンドは？",
+    choices: choiceShuffle(["useradd", "usermod", "userdel", "passwd"]),
+    answer: "useradd"
+  },
+  {
+    question: "ユーザーのパスワードを変更するためのコマンドは？",
+    choices: choiceShuffle(["passwd", "useradd", "usermod", "userdel"]),
+    answer: "passwd"
+  },
+  {
+    question: "プロセスを表示するためのコマンドは？",
+    choices: choiceShuffle(["ps", "top", "kill", "nice"]),
+    answer: "ps"
+  },
+  {
+    question: "プロセスを停止するためのコマンドは？",
+    choices: choiceShuffle(["kill", "ps", "top", "nice"]),
+    answer: "kill"
+  },
+  {    question: "ファイルの中身を編集するためのコマンドは？",    
+  choices: choiceShuffle(["vi", "nano", "emacs", "cat"]),
+    answer: "vi"
+  },
+  {
+    question: "ディレクトリの中身を削除するためのコマンドは？",
+    choices: choiceShuffle(["rm -r", "mv", "cp", "ls"]),
+    answer: "rm -r"
+  },
+  {
+    question: "ディレクトリを移動するためのコマンドは？",
+    choices: choiceShuffle(["cd", "ls", "mkdir", "rm"]),
+    answer: "cd"
+  },
+  {
+    question: "システムにログインするためのコマンドは？",
+    choices: choiceShuffle(["ssh", "scp", "sftp", "telnet"]),
+    answer: "ssh"
+  },
+  {
+    question: "ファイルの圧縮や解凍をするためのコマンドは？",
+    choices: choiceShuffle(["tar", "zip", "unzip", "gzip"]),
+    answer: "tar"
+  },
+  {
+    question: "システムのネットワーク情報を表示するためのコマンドは？",
+    choices: choiceShuffle(["ifconfig", "netstat", "route", "ping"]),
+    answer: "ifconfig"
+  },
+  {
+    question: "システムのネットワーク接続情報を表示するためのコマンドは？",
+    choices: choiceShuffle(["netstat", "ifconfig", "route", "ping"]),
+    answer: "netstat"
+  },
+  {
+    question: "カレントディレクトリのパスを表示するコマンドは？",
+    choices: choiceShuffle(["pwd", "ls", "cd", "mkdir"]),
+    answer: "pwd"
+  },
+  {    question: "ディレクトリを作成するためのコマンドは？",    
+  choices: choiceShuffle(["mkdir", "rmdir", "cd", "ls"]),
+    answer: "mkdir"
+  },
+  {
+    question: "ファイルのコピーをするためのコマンドは？",
+    choices: choiceShuffle(["cp", "mv", "rm", "ls"]),
+    answer: "cp"
+  },
+  {
+    question: "ファイルの移動をするためのコマンドは？",
+    choices: choiceShuffle(["mv", "cp", "rm", "ls"]),
+    answer: "mv"
+  },
+  {
+    question: "ファイルの削除をするためのコマンドは？",
+    choices: choiceShuffle(["rm", "mv", "cp", "ls"]),
+    answer: "rm"
+  },
+  {
+    question: "ファイルの内容を表示するためのコマンドは？",
+    choices: choiceShuffle(["cat", "grep", "sed", "awk"]),
+    answer: "cat"
+  },
+  {
+    question: "ファイルの末尾から指定した行数を表示するためのコマンドは？",
+    choices: choiceShuffle(["tail", "head", "more", "less"]),
+    answer: "tail"
+  },
+  {
+    question: "ファイルの先頭から指定した行数を表示するためのコマンドは？",
+    choices: choiceShuffle(["head", "tail", "more", "less"]),
+    answer: "head"
+  },
+  {
+    question: "ファイルを検索するためのコマンドは？",
+    choices: choiceShuffle(["grep", "cat", "sed", "awk"]),
+    answer: "grep"
+  },
+  {
+    question: "システムのリソース使用状況を表示するためのコマンドは？",
+    choices: choiceShuffle(["top", "ps", "df", "du"]),
+    answer: "top"
+  }
+
+];
+
+
+		// Shuffle questions
+		function shuffle(array) {
+			for (let i = array.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[array[i], array[j]] = [array[j], array[i]];
+			}
+			return array;
+		}
+
+
+		// Get random questions(slice=問題数)
+		const randomQuestions = shuffle(questions).slice(0, 10);
+
+		// DOM elements
+		const questionEl = document.getElementById("question");
+		const choicesEl = document.getElementById("choices");
+		const submitBtn = document.getElementById("submit");
+		const resultEl = document.getElementById("result");
+
+		let currentQuestionIndex = 0;
+		let score = 0;
+
+		// Display question and choices
+		function showQuestion() {
+			const question = randomQuestions[currentQuestionIndex];
+			questionEl.innerText = question.question;
+			choicesEl.innerHTML = "";
+			for (let i = 0; i < question.choices.length; i++) {
+				const choice = question.choices[i];
+				const button = document.createElement("button");
+				button.innerText = choice;
+				button.classList.add("answer-btn");
+				button.addEventListener("click", function() {
+					checkAnswer(choice, question.answer);
+				});
+				choicesEl.appendChild(button);
+			}
+		}
+
+		// Check answer and update score
+		function checkAnswer(userChoice, answer) {
+			if (userChoice === answer) {
+				score++;
+				resultEl.innerText = "正解!";
+			} else {
+				resultEl.innerText = "間違い! 正解は " + answer;
+			}
+			currentQuestionIndex++;
+			if (currentQuestionIndex < randomQuestions.length) {
+				showQuestion();
+			} else {
+				showResult();
+			}
+		}
+
+		// Show result
+		function showResult() {
+			questionEl.innerText = "Quiz completed!";
+			choicesEl.innerHTML = "";
+			submitBtn.innerText = "Restart Quiz";
+			resultEl.innerText = "You scored " + score + " out of " + randomQuestions.length + "!";
+			submitBtn.addEventListener("click", function() {
+				location.reload();
+			});
+		}
+
+		// Start quiz
+		submitBtn.addEventListener("click", function() {
+			showQuestion();
+		});
+	</script>
+</body>
+</html>
+
+
+
+
